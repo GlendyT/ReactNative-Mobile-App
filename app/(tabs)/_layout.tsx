@@ -95,7 +95,7 @@ const _layout = () => {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profie",
+          title: "Profile",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <>
