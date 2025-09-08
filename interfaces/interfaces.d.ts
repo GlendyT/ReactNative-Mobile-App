@@ -14,7 +14,6 @@ interface Movie {
   vote_average: number;
   vote_count: number;
 }
-
 interface TrendingMovie {
   searchTerm: string;
   movie_id: number;
@@ -74,4 +73,58 @@ interface MovieDetails {
 interface TrendingCardProps {
   movie: TrendingMovie;
   index: number;
+}
+
+interface Profile {
+  avatar: { gravatar: { hash: string }; tmdb: { avatar_path: string | null } };
+  id: number;
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  include_adult: boolean;
+  username: string;
+}
+
+interface FavoriteMovies {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
+
+interface TVshows {
+  adult: boolean;
+  backdrop_path: string;
+  id: number;
+  original_name: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  first_air_date:  string;
+  name: string;
+  vote_average: number;
+  vote_count: number;
+}
+interface FavoriteTVShows {
+  page: number;
+  results: TVshows[];
+  total_pages: number;
+  total_results: number;
+}
+interface Lists {
+  created_by: string;
+  description: string;
+  favorite_count: number;
+  id: number;
+  item_count: number;
+  iso_639_1: string;
+  name: string;
+  poster_path: string | null;
+}
+
+interface ListsResponse {
+  page: number;
+  results: Lists[];
+  total_pages: number;
+  total_results: number;
 }
