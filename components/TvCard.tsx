@@ -9,6 +9,7 @@ const TvCard = ({
   vote_average,
   name,
   first_air_date,
+  overview
 }: TVshows) => {
   return (
     <Link href={`/tvshow/${id}` as any} asChild>
@@ -34,10 +35,7 @@ const TvCard = ({
         <View className="flex-row items-center justify-between">
           <Text className="text-xs text-light-300 font-medium mt-1">
             {first_air_date?.split("-")[0]}{" "}
-          </Text>
-          {/* <Text className="text-xs font-medium text-light-300 uppercase">
-            Movie
-          </Text> */}
+          </Text> 
         </View>
       </TouchableOpacity>
     </Link>

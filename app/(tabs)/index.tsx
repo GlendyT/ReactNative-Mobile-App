@@ -1,23 +1,29 @@
 import MovieCard from "@/components/MovieCard";
 import SearchBar from "@/components/SearchBar";
 import TrendingCard from "@/components/TrendingCard";
+import TvCard from "@/components/TvCard";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
-import { fetchMovies } from "@/services/api";
+import { fetchMovies, fetchSeries } from "@/services/api";
 import { getTrendingMovies } from "@/services/appwrite";
 import useFetch from "@/services/useFetch";
 import { useRouter } from "expo-router";
+
 import {
   ActivityIndicator,
   FlatList,
   Image,
   ScrollView,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 
+import { useState } from "react";
+
 export default function Index() {
   const router = useRouter();
+  const [selectedTab, setSelectedTab] = useState(1);
 
   const {
     data: trendingMovies,
@@ -34,6 +40,36 @@ export default function Index() {
       query: "",
     })
   );
+
+  const {
+    data: series,
+    loading: seriesLoading,
+    error: seriesError,
+  } = useFetch(() =>
+    fetchSeries({
+      query: "",
+    })
+  );
+
+  const localtabs = [
+    {
+      id: 1,
+      title: "Movies",
+      data: movies,
+      loading: moviesLoading,
+      error: moviesError,
+    },
+    {
+      id: 2,
+      title: "Series",
+      data: series,
+      loading: seriesLoading,
+      error: seriesError,
+    },
+  ];
+
+  const selectedTabData = localtabs.find((tab) => tab.id === selectedTab);
+
   return (
     <View className="flex-1 bg-primary ">
       <Image source={images.bg} className="absolute w-full z-0" />
@@ -78,23 +114,71 @@ export default function Index() {
                 showsHorizontalScrollIndicator={false}
                 ItemSeparatorComponent={() => <View className="w-4" />}
               />
-              <Text className="text-lg text-white font-bold mt-5 mb-3">
-                Latest Movies
-              </Text>
-              <FlatList
-                data={movies}
-                renderItem={({ item }) => <MovieCard {...item} />}
-                keyExtractor={(item) => item.id.toString()}
-                numColumns={3}
-                columnWrapperStyle={{
-                  justifyContent: "flex-start",
-                  gap: 20,
-                  paddingRight: 5,
-                  marginBottom: 10,
-                }}
-                className="mt-2 pb-32"
-                scrollEnabled={false}
-              />
+
+              <View className="flex-row gap-2 justify-between items-center ">
+                <Text className="text-lg text-white font-bold mt-5 mb-3">
+                  Latest
+                </Text>
+                <View className="flex-row gap-2">
+                  {localtabs.map((tab) => (
+                    <TouchableOpacity
+                      key={tab.id}
+                      onPress={() => setSelectedTab(tab.id)}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        className={`text-md font-bold mt-5 mb-3 px-2 py-1 rounded-full ${
+                          selectedTab === tab.id
+                            ? "bg-violet-400 text-black"
+                            : "bg-violet-100/40 text-black/60"
+                        }`}
+                      >
+                        {tab.title}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              {selectedTabData?.loading ? (
+                <ActivityIndicator
+                  size="large"
+                  color="#0000ff"
+                  className="mt-10 self-center"
+                />
+              ) : selectedTabData?.error ? (
+                <Text> Error: {selectedTabData.error?.message} </Text>
+              ) : selectedTab === 1 ? (
+                <FlatList
+                  data={movies}
+                  renderItem={({ item }) => <MovieCard {...item} />}
+                  keyExtractor={(item) => item.id.toString()}
+                  numColumns={3}
+                  columnWrapperStyle={{
+                    justifyContent: "flex-start",
+                    gap: 20,
+                    paddingRight: 5,
+                    marginBottom: 10,
+                  }}
+                  className="mt-2 pb-32"
+                  scrollEnabled={false}
+                />
+              ) : (
+                <FlatList
+                  data={series}
+                  renderItem={({ item }) => <TvCard {...item} />}
+                  keyExtractor={(item) => item.id.toString()}
+                  numColumns={3}
+                  columnWrapperStyle={{
+                    justifyContent: "flex-start",
+                    gap: 20,
+                    paddingRight: 5,
+                    marginBottom: 10,
+                  }}
+                  className="mt-2 pb-32"
+                  scrollEnabled={false}
+                />
+              )}
             </>
           </View>
         )}
