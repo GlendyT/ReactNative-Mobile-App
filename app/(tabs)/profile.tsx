@@ -5,12 +5,12 @@ import {
   fetchFavoriteMovies,
   fetchFavoriteTVShows,
   fetchLists,
-  fetchProfile,
+  fetchProfile
 } from "@/services/api";
 import useFetch from "@/services/useFetch";
 import { Link } from "expo-router";
 import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 interface FavoriteProps {
   id: number;
@@ -66,6 +66,7 @@ const Profile = () => {
           />
         </View>
       </View>
+
       <View className="px-5 mt-6 flex-row items-center justify-between">
         {favorite.map((item) => (
           <Link
@@ -81,7 +82,7 @@ const Profile = () => {
           </Link>
         ))}
       </View>
-      <View className="px-5 mt-10 flex-1 ">
+      <ScrollView className="px-5 mt-10 flex-1 ">
         <Text className="text-white text-2xl font-extrabold text-center">
           Account Info
         </Text>
@@ -89,7 +90,9 @@ const Profile = () => {
         <Profiledetails title="Name" subtitle={profile?.name} />
         <Profiledetails title="Language" subtitle={profile?.iso_639_1} />
         <Profiledetails title="Country" subtitle={profile?.iso_3166_1} />
-      </View>
+        
+      </ScrollView>
+
     </View>
   );
 };
