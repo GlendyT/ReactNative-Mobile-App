@@ -1,15 +1,16 @@
+import Profiledetails from "@/components/ProfileDetails";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import {
   fetchFavoriteMovies,
   fetchFavoriteTVShows,
   fetchLists,
-  fetchProfile,
+  fetchProfile
 } from "@/services/api";
 import useFetch from "@/services/useFetch";
 import { Link } from "expo-router";
 import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 interface FavoriteProps {
   id: number;
@@ -52,7 +53,7 @@ const Profile = () => {
   return (
     <View className="bg-primary flex-1  ">
       <Image source={images.bg} className="absolute w-full z-0" />
-      <View className=" px-5 fixed ">
+      <View className=" px-5 fixed backdrop-blur-lg bg-black/80 border-b border-gray-600 pb-6">
         <View className="flex flex-row items-center mt-20 sticky">
           <Text className="text-white text-6xl flex-1 items-center justify-center">
             {profile?.username}
@@ -65,7 +66,8 @@ const Profile = () => {
           />
         </View>
       </View>
-      <View className="px-5 mt-10 flex-row items-center justify-between">
+
+      <View className="px-5 mt-6 flex-row items-center justify-between">
         {favorite.map((item) => (
           <Link
             href={item.route as any}
@@ -80,6 +82,17 @@ const Profile = () => {
           </Link>
         ))}
       </View>
+      <ScrollView className="px-5 mt-10 flex-1 ">
+        <Text className="text-white text-2xl font-extrabold text-center">
+          Account Info
+        </Text>
+        <Profiledetails title="User" subtitle={profile?.username} />
+        <Profiledetails title="Name" subtitle={profile?.name} />
+        <Profiledetails title="Language" subtitle={profile?.iso_639_1} />
+        <Profiledetails title="Country" subtitle={profile?.iso_3166_1} />
+        
+      </ScrollView>
+
     </View>
   );
 };
